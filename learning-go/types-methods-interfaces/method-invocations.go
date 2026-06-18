@@ -42,7 +42,27 @@ type Manager struct {
 
 func (m Manager) FindNewEmployees() []Employee // followed by business logic
 
+//-------embedding functions---------------
+type Inner struct {
+	A int
+}
 
+func (i Inner) IntPrinter(val int) string {
+	return fmt.Sprintf("Inner: %d", val)
+}
+
+func (i Inner) Double() string {
+	return i.IntPrinter(i.A * 2)
+}
+
+type Outer struct {
+	Inner
+	S string
+}
+
+func (o Outer) IntPrinter(val int) string {
+	return fmt.Sprintf("Outer: %d", val)
+}
 
 //-----------------------------------------
 type Person struct {
@@ -128,6 +148,15 @@ func main() {
 
 	output := p.String()
 	fmt.Println(output)
+
+	//---------embedding-------------------
+	outer := Outer{
+		Inner: Inner{
+			A: 10,
+		},
+		S: "Hello",
+	}
+	fmt.Println(outer.Double())
 
 	//-------------------------------------
 
