@@ -5,6 +5,28 @@ import (
 	"time"
 )
 
+//--------iota----------------------------
+type MailCategory int
+
+const (
+	Uncategorized MailCategory = iota //(0) is assigned to the first Constant, 1 is assigned to Personal and so on
+	Personal
+	Spam
+	Social
+	Advertisement
+)
+
+const (
+	Field1 = 0
+	Field2 = 1 + iota
+	Field3 = 20
+	Field4 //Assigned to 20 because it has no type | value hence it takes from the previous one
+	Field5 = iota //Get assigned 4 because it's the fifth line and iota starts counting from 0
+
+)
+
+
+//-----------------------------------------
 type Person struct {
 	FirstName string
 	LastName  string
@@ -77,6 +99,9 @@ func (it *IntTree) Contains(val int) bool {
 }
 
 func main() {
+	//-----iota--------------------------
+	fmt.Println("IOTA",Field1, Field2, Field3, Field4, Field5)
+
 	p := Person{
 		FirstName: "Steven",
 		LastName:  "Universe",
