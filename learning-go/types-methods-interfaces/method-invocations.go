@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-//--------iota----------------------------
+// --------iota----------------------------
 type MailCategory int
 
 const (
@@ -20,15 +20,15 @@ const (
 	Field1 = 0
 	Field2 = 1 + iota
 	Field3 = 20
-	Field4 //Assigned to 20 because it has no type | value hence it takes from the previous one
+	Field4        //Assigned to 20 because it has no type | value hence it takes from the previous one
 	Field5 = iota //Get assigned 4 because it's the fifth line and iota starts counting from 0
 
 )
 
-//---------composition and promotion-------
+// ---------composition and promotion-------
 type Employee struct {
 	Name string
-	ID string
+	ID   string
 }
 
 func (e Employee) Description() string {
@@ -42,7 +42,7 @@ type Manager struct {
 
 func (m Manager) FindNewEmployees() []Employee // followed by business logic
 
-//-------embedding functions---------------
+// -------embedding functions---------------
 type Inner struct {
 	A int
 }
@@ -64,7 +64,30 @@ func (o Outer) IntPrinter(val int) string {
 	return fmt.Sprintf("Outer: %d", val)
 }
 
-//-----------------------------------------
+//------------interfaces are comparable----------
+type Doubler interface {
+	Double()
+}
+
+func DoublerCompare(d1, d2 Doubler) {
+	fmt.Println(d1 == d2)
+}
+
+type DoubleInt int
+
+func (d *DoubleInt) Double() {
+	*d = *d * 2
+}
+
+type DoubleIntSlice []int
+
+func (d DoubleIntSlice) Double() {
+	for i := range d {
+		d[i] = d[i] * 2
+	}
+}
+
+// -----------------------------------------
 type Person struct {
 	FirstName string
 	LastName  string
@@ -138,7 +161,7 @@ func (it *IntTree) Contains(val int) bool {
 
 func main() {
 	//-----iota--------------------------
-	fmt.Println("IOTA",Field1, Field2, Field3, Field4, Field5)
+	fmt.Println("IOTA", Field1, Field2, Field3, Field4, Field5)
 
 	p := Person{
 		FirstName: "Steven",
@@ -188,5 +211,15 @@ func main() {
 	it = it.Insert(2)
 	fmt.Println(it.Contains(2))  // true
 	fmt.Println(it.Contains(12)) // false
-	fmt.Println(*it.left) // false
+	fmt.Println(*it.left)        // false
+
+	//------------comparing interfaces---------
+	var di1 DoubleInt = 10
+	var di2 DoubleInt = 10
+	var dis1 = DoubleIntSlice{1, 2,3}
+	// var dis2 = DoubleIntSlice{1,2,3}
+
+	DoublerCompare(&di1, &di2) // we are comparing pointers here and not values hence we get false because they do not have the same instance
+	DoublerCompare(&di1, dis1) // types do not match
+	// DoublerCompare(dis1, dis2) //?? This code will trigger a panic
 }
